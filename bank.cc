@@ -1,7 +1,7 @@
 #include "bank.h"
 
 Bank::Bank( unsigned int numStudents ) : numStudents(numStudents) {
-	accounts = new int[numStudents];
+	accounts = new unsigned int[numStudents];
 	for (unsigned int i = 0; i < numStudents; i ++) {
 		accounts[i] = 0;
 	}
