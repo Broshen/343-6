@@ -4,6 +4,9 @@
 using namespace std;					// direct access to std
 #include <cstdlib>					// exit
 #include "config.h"
+#include "MPRNG.h"
+
+MPRNG mprng;
 
 int main( int argc, char * argv[] ) {
     // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
@@ -28,6 +31,7 @@ int main( int argc, char * argv[] ) {
         << " [ config-file [ Seed ] ]" << endl;
         exit( EXIT_FAILURE );				// TERMINATE
     } // try
+    mprng.set_seed(seed);
     //cout << "size " << size << " code " << code << endl;
     ConfigParms configParms;
     processConfigFile(filename.c_str(), configParms);
