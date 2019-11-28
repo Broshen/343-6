@@ -5,6 +5,8 @@ using namespace std;					// direct access to std
 #include <cstdlib>					// exit
 #include "config.h"
 #include "printer.h"
+#include "nameserver.h"
+#include "vending.h"
 
 int main( int argc, char * argv[] ) {
     // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
@@ -34,5 +36,19 @@ int main( int argc, char * argv[] ) {
     processConfigFile(filename.c_str(), configParms);
 
     Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
+
+    NameServer * ns = new NameServer(printer, configParms.numVendingMachines, configParms.numStudents);
+    VendingMachine **vms = new VendingMachine*[configParms.numVendingMachines];
+
+    for(unsigned int i=0; i<configParms.numVendingMachines; i++){
+        vms[i] = new VendingMachine(printer, *ns, i, configParms.sodaCost);
+        ns->VMregister(vms[i]);
+    }
+
+    delete ns;
+    for(unsigned int i=0; i<configParms.numVendingMachines; i++){
+        delete vms[i];
+    }
+    delete vms;
     
 } // main
