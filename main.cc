@@ -4,6 +4,7 @@
 using namespace std;					// direct access to std
 #include <cstdlib>					// exit
 #include "config.h"
+#include "printer.h"
 #include "MPRNG.h"
 
 MPRNG mprng;
@@ -35,5 +36,7 @@ int main( int argc, char * argv[] ) {
     //cout << "size " << size << " code " << code << endl;
     ConfigParms configParms;
     processConfigFile(filename.c_str(), configParms);
+
+    Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
     
 } // main
