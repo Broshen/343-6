@@ -4,6 +4,7 @@
 _Monitor Bank {
 	unsigned int numStudents;
 	int *accounts;
+	uCondition *withdrawCondition;
   public:
 	Bank( unsigned int numStudents );
 	~Bank();

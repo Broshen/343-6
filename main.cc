@@ -33,7 +33,6 @@ int main( int argc, char * argv[] ) {
         exit( EXIT_FAILURE );				// TERMINATE
     } // try
     mprng.set_seed(seed);
-    //cout << "size " << size << " code " << code << endl;
     ConfigParms configParms;
     processConfigFile(filename.c_str(), configParms);
 
