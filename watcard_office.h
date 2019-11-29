@@ -12,6 +12,7 @@ _Task WATCardOffice {
 		struct Args {
 			unsigned int sid, amount;						// call arguments (YOU DEFINE "Args")
 			WATCard *watcard;
+			bool isCreate;
 		};
 		Args args;
 		WATCard::FWATCard result;			// return future
