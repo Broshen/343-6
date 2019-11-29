@@ -3,10 +3,17 @@
 
 #include "printer.h"
 #include "nameserver.h"
-struct WATCardOffice; // replace with #include "watcard_office.h" once implemented
+#include "watcard_office.h"
 #include "groupoff.h"
 
 _Task Student {
+	Printer &prt;
+	NameServer &nameServer;
+	WATCardOffice &cardOffice;
+	Groupoff &groupoff;
+	unsigned int id;
+	unsigned int maxPurchases;
+	
 	void main();
   public:
 	Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice, Groupoff & groupoff,
