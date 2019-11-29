@@ -8,6 +8,7 @@ _Task NameServer {
 	void main();
 	Printer & prt;
 	unsigned int numVendingMachines, numStudents;
+	unsigned int * assignedMachine; // array of student id : machine mapping
 	VendingMachine ** machines;
 
   public:
