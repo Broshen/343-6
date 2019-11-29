@@ -3,7 +3,7 @@ CXXFLAGS = -g -multi -O2 -std=c++11 -Wall -Wextra -MMD # compiler flags
 MAKEFILE_NAME = ${firstword ${MAKEFILE_LIST}}	# makefile name
 
 
-OBJECTS = bank.o config.o main.o printer.o
+OBJECTS = watcard_office.o bank.o config.o main.o printer.o
 
 EXEC = soda
 
