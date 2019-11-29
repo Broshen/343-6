@@ -1,4 +1,5 @@
 #include "student.h"
+#include "watcard_office.h"
 #include "MPRNG.h"
 extern MPRNG mprng;
 Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice, Groupoff & groupoff,
