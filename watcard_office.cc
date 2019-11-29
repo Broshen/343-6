@@ -2,8 +2,6 @@
 #include "MPRNG.h"
 extern MPRNG mprng;
 
-// WATCardOffice::Job::Job(Args args) : args(args) {}
-
 void WATCardOffice::Courier::main() {
 	for (;;) {
 		Job *job = office.requestWork();
