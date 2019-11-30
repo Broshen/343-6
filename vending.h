@@ -3,6 +3,9 @@
 
 #include "printer.h"
 #include "watcard.h"
+#include "MPRNG.h"
+extern MPRNG mprng;
+
 
 struct NameServer;
 
@@ -12,10 +15,10 @@ _Task VendingMachine {
 	Printer &prt;
 	NameServer & nameServer;
 	unsigned int id, sodaCost;
-	unsigned int sodaStock[3] = {0,0,0};
+	unsigned int sodaStock[4] = {0,0,0,0};
 
   public:
-	enum Flavours { Moist, Human, BBQ  }; 				// flavours of soda (YOU DEFINE)
+	enum Flavours { Moist, BBQ, Human, Meat }; 				// flavours of soda (YOU DEFINE)
 	_Event Free {};						// free, advertisement
 	_Event Funds {};					// insufficient funds
 	_Event Stock {};					// out of stock for particular flavour

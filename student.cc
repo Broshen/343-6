@@ -24,6 +24,4 @@ void Student::main() {
 
 		}
 	}
-
-
 }

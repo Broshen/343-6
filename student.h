@@ -5,6 +5,8 @@
 #include "nameserver.h"
 #include "watcard_office.h"
 #include "groupoff.h"
+#include "MPRNG.h"
+extern MPRNG mprng;
 
 _Task Student {
 	Printer &prt;
