@@ -22,9 +22,10 @@ _Task WATCardOffice {
 	_Task Courier { 
 		WATCardOffice &office;
 		Bank &bank;
+		Printer &prt;
 		void main();
 	public:
-		Courier(WATCardOffice &office, Bank &bank): office(office), bank(bank) {}
+		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt){}
 	};					// communicates with bank
 
 	Printer &prt;

@@ -37,7 +37,7 @@ void VendingMachine::buy(VendingMachine::Flavours flavour, WATCard & card ){
 }
 
 unsigned int * VendingMachine::inventory(){
-
+	return (unsigned int * )sodaStock;
 }
 void VendingMachine::restocked(){
 

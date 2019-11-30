@@ -7,9 +7,18 @@ using namespace std;					// direct access to std
 #include "printer.h"
 #include "nameserver.h"
 #include "vending.h"
+#include "bottling.h"
 #include "MPRNG.h"
 
 MPRNG mprng;
+
+_Task longAssLoop{
+    void main(){
+        for(int i=0; i<15; i++){
+            yield(15);
+        }
+    }
+};
 
 int main( int argc, char * argv[] ) {
     // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
@@ -48,6 +57,19 @@ int main( int argc, char * argv[] ) {
         ns->VMregister(vms[i]);
     }
 
+
+    BottlingPlant * bp = new BottlingPlant(
+        printer, *ns,
+        configParms.numVendingMachines,
+        configParms.maxShippedPerFlavour,
+        configParms.maxStockPerFlavour,
+        configParms.timeBetweenShipments
+    );
+
+
+    longAssLoop();
+
+    delete bp;
     delete ns;
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         delete vms[i];
