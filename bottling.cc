@@ -1,5 +1,4 @@
 #include "bottling.h"
-#include <iostream>
 
 BottlingPlant::BottlingPlant( Printer & prt, NameServer & nameServer, unsigned int numVendingMachines,
 				 unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
@@ -13,27 +12,26 @@ maxStockPerFlavour{maxStockPerFlavour},timeBetweenShipments{timeBetweenShipments
 // plant is closing down, and no shipment is copied into the cargo array passed by the truck. A flag variable is
 // necessary to know when to raise Shutdown on the correct task stack.)
 void BottlingPlant::getShipment( unsigned int cargo[] ){
-	std::cerr<<"GET SHIPMENT"<<std::endl;
-	_Accept(~BottlingPlant){
+
+	if (closing) {
 		throw BottlingPlant::Shutdown();
-	} _Else {
-		// producing.V(); // wait for plant to finish production run before picking up
-		prt.print(Printer::BottlingPlant, 'P');
-		cargo[0] += inventory[0];
-		cargo[1] += inventory[1];
-		cargo[2] += inventory[2];
-		cargo[3] += inventory[3];
 	}
+	prt.print(Printer::BottlingPlant, 'P');
+	cargo[0] += inventory[0];
+	cargo[1] += inventory[1];
+	cargo[2] += inventory[2];
+	cargo[3] += inventory[3];
+
 
 }
 
 void BottlingPlant::produce(){
 	// To simulate a production run of soda, the bottling plant yields for TimeBetweenShipments times (not random).
 	yield(timeBetweenShipments);
-	inventory[0] = mprng(0, maxShippedPerFlavour);
-	inventory[1] = mprng(0, maxShippedPerFlavour);
-	inventory[2] = mprng(0, maxShippedPerFlavour);
-	inventory[3] = mprng(0, maxShippedPerFlavour);
+	inventory[0] = mprng(maxShippedPerFlavour);
+	inventory[1] = mprng(maxShippedPerFlavour);
+	inventory[2] = mprng(maxShippedPerFlavour);
+	inventory[3] = mprng(maxShippedPerFlavour);
 	prt.print(Printer::BottlingPlant, 'G', inventory[0]+inventory[1]+inventory[2]+inventory[3]);
 }
 
@@ -44,17 +42,26 @@ void BottlingPlant::main(){
 	produce();
 
 	while(true){
-	// for(int i=0; i<5; i++){
 		// The bottling plant does not start another production run until the truck has picked up the current run.
-		// producing.P(); // wait for current production run is picked up before starting a new one
-
 		_Accept(getShipment){
 			produce();
-		};
-	}
+		} or _Accept(~BottlingPlant) {
 
+			closing = true;
+			try {
+				_Accept(getShipment){}
+			} catch( uMutexFailure::RendezvousFailure& ) {}
+			break;
+		} ;
+	}
 	prt.print(Printer::BottlingPlant, 'F');
 
-	delete truck;
+}
+
+BottlingPlant::~BottlingPlant(){
+
+	if (truck){
+		delete truck;
+	}
 }
 

@@ -12,6 +12,14 @@ using namespace std;					// direct access to std
 
 MPRNG mprng;
 
+_Task longAssLoop{
+    void main(){
+        for(int i=0; i<15; i++){
+            yield(15);
+        }
+    }
+};
+
 int main( int argc, char * argv[] ) {
     // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
     unsigned int seed = getpid();
@@ -50,7 +58,6 @@ int main( int argc, char * argv[] ) {
     }
 
 
-
     BottlingPlant * bp = new BottlingPlant(
         printer, *ns,
         configParms.numVendingMachines,
@@ -60,7 +67,7 @@ int main( int argc, char * argv[] ) {
     );
 
 
-
+    longAssLoop();
 
     delete bp;
     delete ns;

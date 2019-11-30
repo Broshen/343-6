@@ -16,8 +16,8 @@ _Task BottlingPlant {
 	Printer & prt;
 	NameServer & nameServer;
 	Truck * truck;
-	uSemaphore producing;
 	unsigned int inventory[4]; // inventory for each flavor
+	bool closing = false;
 	void produce();
 
   public:
@@ -25,6 +25,7 @@ _Task BottlingPlant {
 	BottlingPlant( Printer & prt, NameServer & nameServer, unsigned int numVendingMachines,
 				 unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
 				 unsigned int timeBetweenShipments );
+	~BottlingPlant();
 	void getShipment( unsigned int cargo[] );
 };
 

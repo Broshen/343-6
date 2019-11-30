@@ -13,7 +13,6 @@ void Truck::main(){
 
 	while(true){
 		// Before each shipment from the bottling plant, the truck yields a random number of times [1, 10]
-		std::cerr<<"before yield"<<std::endl;
 		yield(mprng(1,10));
 
 		// The truck then calls BottlingPlant::getShipment to obtain a new shipment of soda;
@@ -24,7 +23,6 @@ void Truck::main(){
 		cargo[3] = 0;
 
 		try {
-			std::cerr<<"before getting shipment"<<std::endl;
 			plant.getShipment(cargo);
 			prt.print(Printer::Truck, 'P', cargo[0]+cargo[1]+cargo[2]+cargo[3]);
 		} catch (BottlingPlant::Shutdown &){
@@ -53,7 +51,7 @@ void Truck::main(){
 			unsigned int * inv = machines[idx]->inventory();
 			for(int i=0; i<4 ; i++){
 				// The truck can only restock up to MaxStockPerFlavour for each flavour in each vending machine
-				unsigned int amt = std::max(cargo[i], maxStockPerFlavour - inv[i]);
+				unsigned int amt = std::min(cargo[i], maxStockPerFlavour - inv[i]);
 				cargo[i] -= amt;
 				inv[i] += amt;
 
