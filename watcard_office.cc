@@ -2,7 +2,15 @@
 #include "MPRNG.h"
 extern MPRNG mprng;
 
+WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): prt(prt), bank(bank), numCouriers(numCouriers) {
+	courierPool = new Courier*[numCouriers];
+	for (unsigned int i = 0; i < numCouriers; i ++) {
+		courierPool[i] = new Courier (*this, bank, prt);
+	}
+}
+
 void WATCardOffice::Courier::main() {
+	//TODO: exit loop condition
 	for (;;) {
 		Job *job = office.requestWork();
 		prt.print(Printer::WATCardOffice, 'W');
@@ -26,16 +34,17 @@ void WATCardOffice::Courier::main() {
 void WATCardOffice::main() {
 	prt.print(Printer::WATCardOffice, 'S');
 	for (;;) {
-		_Accept(~WATCardOffice) break;
-		or _Accept(create, transfer);
+		try {
+			_Accept(~WATCardOffice) break;
+			or _Accept(create, transfer);
+		} catch (uMutexFailure::RendezvousFailure &) {}
+		
 		// TODO: try this _When statement to see if we can remove uCondition
 		// Concern: is WatCardOffice allowed to block?
  		// or _When (!pendingJobs.empty()) _Accept(requestWork) ;
 	}
 	prt.print(Printer::WATCardOffice, 'F');
 }
-
-WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): prt(prt), bank(bank), numCouriers(numCouriers) {}
 
 WATCard::FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount ) {
 	// be careful of deadlock
@@ -57,4 +66,11 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 	Job *nextJob = pendingJobs.front();
 	pendingJobs.pop();
 	return nextJob;
+}
+
+WATCardOffice::~WATCardOffice() {
+	for (unsigned int i = 0; i < numCouriers; i ++) {
+		delete courierPool[i];
+	}
+	delete [] courierPool;
 }

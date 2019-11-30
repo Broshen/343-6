@@ -25,7 +25,7 @@ _Task WATCardOffice {
 		Printer &prt;
 		void main();
 	public:
-		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt){}
+		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt) {}
 	};					// communicates with bank
 
 	Printer &prt;
@@ -33,6 +33,7 @@ _Task WATCardOffice {
 	unsigned int numCouriers;
 	uCondition jobReady;
 	queue<Job *> pendingJobs;
+	Courier **courierPool;
 	void main();
   public:
 	_Event Lost {};							// lost WATCard
@@ -40,6 +41,7 @@ _Task WATCardOffice {
 	WATCard::FWATCard create( unsigned int sid, unsigned int amount );
 	WATCard::FWATCard transfer( unsigned int sid, unsigned int amount, WATCard * card );
 	Job * requestWork();
+	~WATCardOffice();
 };
 
 #endif
