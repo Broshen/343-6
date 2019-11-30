@@ -3,6 +3,7 @@
 extern MPRNG mprng;
 
 void WATCardOffice::Courier::main() {
+	//TODO: exit loop condition
 	for (;;) {
 		Job *job = office.requestWork();
 		prt.print(Printer::WATCardOffice, 'W');
@@ -26,8 +27,11 @@ void WATCardOffice::Courier::main() {
 void WATCardOffice::main() {
 	prt.print(Printer::WATCardOffice, 'S');
 	for (;;) {
-		_Accept(~WATCardOffice) break;
-		or _Accept(create, transfer);
+		try {
+			_Accept(~WATCardOffice) break;
+			or _Accept(create, transfer);
+		} catch (uMutexFailure::RendezvousFailure &) {}
+		
 		// TODO: try this _When statement to see if we can remove uCondition
 		// Concern: is WatCardOffice allowed to block?
  		// or _When (!pendingJobs.empty()) _Accept(requestWork) ;

@@ -9,7 +9,9 @@ Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOf
 void Student::main() {
 	unsigned int toPurchase = mprng(1, maxPurchases);
 	unsigned int favFlavour = mprng(3);
+	cardOffice.create(id, 5);
 
 	yield(mprng(1, 10));
+
 
 }
