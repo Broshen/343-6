@@ -8,20 +8,56 @@ Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOf
 
 void Student::main() {
 	unsigned int toPurchase = mprng(1, maxPurchases);
-	unsigned int favFlavour = mprng(3);
+	unsigned int favFlavour = mprng(3); 
+	prt.print(Printer::Student, id, 'S', favFlavour, toPurchase);
+
 	WATCard::FWATCard watcard = cardOffice.create(id, 5);
 	WATCard::FWATCard giftCard = groupoff.giftCard();
-	// obtain location of vending machine
+	VendingMachine *machine = nameServer.getMachine(id);
+	prt.print(Printer::Student, id, 'V', machine -> getId());
 
 	for (unsigned int i = 0; i < toPurchase; i ++) {
 		yield(mprng(1, 10));
 		for (;;) {
 			_Select(giftCard) {
-					// buy soda using giftcard
+				try {
+					machine -> buy((VendingMachine::Flavours)favFlavour, *giftCard());
+					prt.print(Printer::Student, id, 'G', favFlavour, giftCard() -> getBalance());
+					giftCard.reset();
+					break;
+				} catch (VendingMachine::Free &) {
+					yield(4);
+					i--;
+					prt.print(Printer::Student, id, 'a', favFlavour, giftCard() -> getBalance());
+					break;
+				} catch (VendingMachine::Stock &) {
+ 					machine = nameServer.getMachine(id);
+					break;
+				}
 			} or _Select(watcard) {
-					// buy soda using watcard
+				try {
+					machine -> buy((VendingMachine::Flavours)favFlavour, *watcard());
+					prt.print(Printer::Student, id, 'B', favFlavour, watcard() -> getBalance());
+					break;
+				} catch (VendingMachine::Free &) {
+					yield(4);
+					i--;
+					prt.print(Printer::Student, id, 'A', favFlavour, watcard() -> getBalance());
+					break;
+				} catch (VendingMachine::Stock &) {
+					 machine = nameServer.getMachine(id);
+					 break;
+				} catch (VendingMachine::Funds &) {
+					cardOffice.transfer(id, machine -> cost() + 5, watcard());
+					break;
+				} catch (WATCardOffice::Lost &) {
+					// TODO: a courier can lose a student's watcard during the transfer for a new watcard so this issue can occur repeatedly
+					prt.print(Printer::Student, id, 'L');
+					watcard = cardOffice.create(id, 5);
+					// do not break so that i do not have to yield
+				}
 			}
-
 		}
 	}
+	prt.print(Printer::Student, id, 'F');
 }
