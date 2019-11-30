@@ -10,13 +10,30 @@ VendingMachine::~VendingMachine(){
 	prt.print(Printer::Vending, id, 'F');
 }
 
-// A student calls buy to obtain one of their favourite sodas. Check first if the student has sufficient funds to
-// purchase the soda and second if the specified soda is available, then the student’s WATCard is debited by the
-// cost of a soda. Otherwise, raise exceptions Funds or Stock, respectively; Once a purchase is possible, there is a
-// 1 in 5 chance the soda is free, if the student watches an advertisement, which is indicated by raising exception
-// Free. (A flag variable is necessary to know when to raise Funds, Stock or Free on the correct task stack.)
+// A student calls buy to obtain one of their favourite sodas.
+// TODO: A flag variable is necessary to know when to raise Funds, Stock or Free on the correct task stack?
 void VendingMachine::buy(VendingMachine::Flavours flavour, WATCard & card ){
+	// Check first if the student has sufficient funds to purchase the soda
+	if (card.getBalance() < sodaCost) {
+		throw VendingMachine::Funds();
+	}
 
+	// Check if the specified soda is available
+	if (sodaStock[flavour] == 0) {
+		throw VendingMachine::Stock();
+	}
+
+	// Buy soda
+	sodaStock[flavour] -= 1;
+	prt.print(Printer::Vending, id, 'B', flavour, sodaStock[flavour]);
+
+	// Once a purchase is possible, there is a 1 in 5 chance the soda is free, if the student watches
+	// an advertisement, which is indicated by raising exception Free.
+	if (mprng(4) == 4){
+		throw VendingMachine::Free();
+	} else {
+		card.withdraw(sodaCost);
+	}
 }
 
 unsigned int * VendingMachine::inventory(){

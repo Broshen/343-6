@@ -11,5 +11,4 @@ void Student::main() {
 	unsigned int favFlavour = mprng(3);
 
 	yield(mprng(1, 10));
-
 }
