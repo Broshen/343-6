@@ -9,9 +9,21 @@ Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOf
 void Student::main() {
 	unsigned int toPurchase = mprng(1, maxPurchases);
 	unsigned int favFlavour = mprng(3);
-	cardOffice.create(id, 5);
+	WATCard::FWATCard watcard = cardOffice.create(id, 5);
+	WATCard::FWATCard giftCard = groupoff.giftCard();
+	// obtain location of vending machine
 
-	yield(mprng(1, 10));
+	for (unsigned int i; i < toPurchase; i ++) {
+		yield(mprng(1, 10));
+		for (;;) {
+			_Select(giftCard) {
+					// buy soda using giftcard
+			} or _Select(watcard) {
+					// buy soda using watcard
+			}
+
+		}
+	}
 
 
 }

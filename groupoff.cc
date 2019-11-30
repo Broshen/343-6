@@ -24,7 +24,7 @@ void Groupoff::main(){
   for (unsigned int i = 0; i < numStudents; i ++) {
     try {
       _Accept(~Groupoff) break;
-			_Else {
+      _Else {
         yield(groupoffDelay);
         // TODO: ensure waiting = numstudents at start
         int assignCard = mprng(waiting - 1);
@@ -38,6 +38,7 @@ void Groupoff::main(){
   }
   prt.print(Printer::Groupoff, 'F');
 }
+
 WATCard::FWATCard Groupoff::giftCard(){
   return giftCards[waiting++];
 }
