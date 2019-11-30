@@ -6,9 +6,7 @@
 #include "MPRNG.h"
 extern MPRNG mprng;
 
-
-struct NameServer;
-
+_Task NameServer;
 
 _Task VendingMachine {
 	void main();

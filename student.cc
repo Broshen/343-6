@@ -13,7 +13,7 @@ void Student::main() {
 	WATCard::FWATCard giftCard = groupoff.giftCard();
 	// obtain location of vending machine
 
-	for (unsigned int i; i < toPurchase; i ++) {
+	for (unsigned int i = 0; i < toPurchase; i ++) {
 		yield(mprng(1, 10));
 		for (;;) {
 			_Select(giftCard) {

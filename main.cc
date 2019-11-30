@@ -8,17 +8,12 @@ using namespace std;					// direct access to std
 #include "nameserver.h"
 #include "vending.h"
 #include "bottling.h"
+#include "watcard_office.h"
+#include "parent.h"
+#include "student.h"
 #include "MPRNG.h"
 
 MPRNG mprng;
-
-_Task longAssLoop{
-    void main(){
-        for(int i=0; i<15; i++){
-            yield(15);
-        }
-    }
-};
 
 int main( int argc, char * argv[] ) {
     // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
@@ -48,6 +43,10 @@ int main( int argc, char * argv[] ) {
     processConfigFile(filename.c_str(), configParms);
 
     Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
+    Bank bank(configParms.numStudents);
+    Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
+    WATCardOffice *office = new WATCardOffice(printer, bank, configParms.numCouriers);
+    Groupoff *groupoff = new Groupoff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
 
     NameServer * ns = new NameServer(printer, configParms.numVendingMachines, configParms.numStudents);
     VendingMachine **vms = new VendingMachine*[configParms.numVendingMachines];
@@ -66,8 +65,21 @@ int main( int argc, char * argv[] ) {
         configParms.timeBetweenShipments
     );
 
+    Student **students = new Student*[configParms.numStudents];
 
-    longAssLoop();
+    for (unsigned int i = 0; i < configParms.numStudents; i ++) {
+        students[i] = new Student(printer, *ns, *office, *groupoff, i, configParms.maxPurchases);
+    }
+
+
+      for (unsigned int i = 0; i < configParms.numStudents; i ++) {
+       delete students[i];
+    }
+    
+    delete [] students;
+
+    delete office;
+    delete groupoff;
 
     delete bp;
     delete ns;
