@@ -53,7 +53,6 @@ int main( int argc, char * argv[] ) {
 
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         vms[i] = new VendingMachine(printer, *ns, i, configParms.sodaCost);
-        ns->VMregister(vms[i]);
     }
 
 

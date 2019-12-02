@@ -1,0 +1,10 @@
+SodaCost 2 # blah
+NumStudents 1
+MaxPurchases 3
+NumVendingMachines 1
+MaxStockPerFlavour 5
+MaxShippedPerFlavour 3
+TimeBetweenShipments 3
+GroupoffDelay 10
+ParentalDelay 2 
+NumCouriers 1

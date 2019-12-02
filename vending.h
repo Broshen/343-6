@@ -14,6 +14,8 @@ _Task VendingMachine {
 	NameServer & nameServer;
 	unsigned int id, sodaCost;
 	unsigned int sodaStock[4] = {0,0,0,0};
+	bool restocking = false;
+	uCondition restockingCond;
 
   public:
 	enum Flavours { Moist, BBQ, Human, Meat }; 				// flavours of soda (YOU DEFINE)
