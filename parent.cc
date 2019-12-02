@@ -8,8 +8,8 @@ void Parent::main(){
     _Accept(~Parent) break;
     _Else {
       yield(parentalDelay);
-      unsigned int recipient = mprng(numStudents - 1);
       unsigned int amount = mprng(1,3);
+      unsigned int recipient = mprng(numStudents - 1);
       bank.deposit(recipient, amount);
       prt.print(Printer::Parent, 'D', recipient, amount);
     }

@@ -44,7 +44,7 @@ int main( int argc, char * argv[] ) {
 
     Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
     Bank bank(configParms.numStudents);
-    Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
+    Parent * parent = new Parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
     WATCardOffice *office = new WATCardOffice(printer, bank, configParms.numCouriers);
     Groupoff *groupoff = new Groupoff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
 
@@ -76,10 +76,9 @@ int main( int argc, char * argv[] ) {
     }
     
     delete [] students;
-
+    delete parent;
     delete office;
     delete groupoff;
-
     delete bp;
     delete ns;
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
