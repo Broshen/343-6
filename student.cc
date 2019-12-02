@@ -28,7 +28,6 @@ void Student::main() {
 					break;
 				} catch (VendingMachine::Free &) {
 					yield(4);
-					toPurchase--;
 					prt.print(Printer::Student, id, 'a', favFlavour, giftCard() -> getBalance());
 					break;
 				} catch (VendingMachine::Stock &) {
@@ -44,7 +43,6 @@ void Student::main() {
 					break;
 				} catch (VendingMachine::Free &) {
 					yield(4);
-					toPurchase--;
 					prt.print(Printer::Student, id, 'A', favFlavour, watcard() -> getBalance());
 					break;
 				} catch (VendingMachine::Stock &) {
