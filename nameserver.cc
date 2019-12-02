@@ -22,6 +22,7 @@ NameServer::~NameServer(){
 
 // All vending machines are registered before being given out.
 void NameServer::VMregister( VendingMachine * vendingmachine ){
+	prt.print(Printer::NameServer, 'R', vendingmachine -> getId());
 	machines[vendingmachine->getId()] = vendingmachine;
 }
 
@@ -32,6 +33,7 @@ VendingMachine * NameServer::getMachine( unsigned int id ){
 	VendingMachine * curMachine =  machines[assignedMachine[id]];
 
 	assignedMachine[id] = (assignedMachine[id] + 1) % numVendingMachines;
+	prt.print(Printer::NameServer, 'N', id ,curMachine -> getId());
 
 	return curMachine;
 }
@@ -44,8 +46,8 @@ VendingMachine ** NameServer::getMachineList(){
 
 void NameServer::main(){
   prt.print(Printer::NameServer, 'S');
-
- 	for (;;){
+	
+	for (;;){
     _Accept(~NameServer) {
       break;
     } or _Accept(getMachineList, VMregister, getMachine) {}
