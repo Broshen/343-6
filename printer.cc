@@ -39,7 +39,7 @@ Printer::~Printer(){
 	// print footer
 	cout<<"***********************"<<endl;
 	// free all memory allocated
-	delete states;
+	delete [] states;
 }
 
 

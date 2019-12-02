@@ -59,7 +59,6 @@ void BottlingPlant::main(){
 }
 
 BottlingPlant::~BottlingPlant(){
-
 	if (truck){
 		delete truck;
 	}

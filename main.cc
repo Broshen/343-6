@@ -72,7 +72,7 @@ int main( int argc, char * argv[] ) {
     }
 
 
-      for (unsigned int i = 0; i < configParms.numStudents; i ++) {
+    for (unsigned int i = 0; i < configParms.numStudents; i ++) {
        delete students[i];
     }
     
@@ -86,6 +86,6 @@ int main( int argc, char * argv[] ) {
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         delete vms[i];
     }
-    delete vms;
+    delete [] vms;
     
 } // main

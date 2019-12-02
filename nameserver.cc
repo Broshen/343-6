@@ -13,12 +13,11 @@ prt{prt},numVendingMachines{numVendingMachines},numStudents{numStudents}{
 	for(unsigned int i=0; i<numStudents; i++){
 		assignedMachine[i] = i % numVendingMachines;
 	}
-	prt.print(Printer::NameServer, 'S');
 }
 
 NameServer::~NameServer(){
-	prt.print(Printer::NameServer, 'F');
-	delete machines;
+	delete [] assignedMachine;
+	delete [] machines;
 }
 
 // All vending machines are registered before being given out.
@@ -44,5 +43,13 @@ VendingMachine ** NameServer::getMachineList(){
 }
 
 void NameServer::main(){
+  prt.print(Printer::NameServer, 'S');
 
+ 	for (;;){
+    _Accept(~NameServer) {
+      break;
+    } or _Accept(getMachineList, VMregister, getMachine) {}
+  }
+
+  prt.print(Printer::NameServer, 'F');
 }

@@ -11,6 +11,19 @@ WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCourie
 	}
 }
 
+WATCardOffice::~WATCardOffice() {
+	for (unsigned int i = 0; i < numCouriers; i ++) {
+		courierPool[i]->done = true;
+	}
+	for (unsigned int i = 0; i < numCouriers; i ++) {
+		jobReady.signalBlock();
+	}
+	for (unsigned int i = 0; i < numCouriers; i ++) {
+		delete courierPool[i];
+	}
+	delete [] courierPool;
+}
+
 void WATCardOffice::main() {
 	prt.print(Printer::WATCardOffice, 'S');
 	for (;;) {
@@ -60,19 +73,6 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 	pendingJobs.pop();
 	prt.print(Printer::WATCardOffice, 'W');
 	return nextJob;
-}
-
-WATCardOffice::~WATCardOffice() {
-	for (unsigned int i = 0; i < numCouriers; i ++) {
-		courierPool[i]->done = true;
-	}
-	for (unsigned int i = 0; i < numCouriers; i ++) {
-		jobReady.signalBlock();
-	}
-	for (unsigned int i = 0; i < numCouriers; i ++) {
-		delete courierPool[i];
-	}
-	delete [] courierPool;
 }
 
 // Each courier task calls requestWork, blocks until a Job request is ready, and then receives
