@@ -12,9 +12,9 @@ extern MPRNG mprng;
 
 _Task BottlingPlant {
 	void main();
-	unsigned int numVendingMachines,maxShippedPerFlavour, maxStockPerFlavour, timeBetweenShipments;
 	Printer & prt;
 	NameServer & nameServer;
+	unsigned int numVendingMachines,maxShippedPerFlavour, maxStockPerFlavour, timeBetweenShipments;
 	Truck * truck;
 	unsigned int inventory[4]; // inventory for each flavor
 	bool closing = false;

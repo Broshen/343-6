@@ -103,6 +103,7 @@ void WATCardOffice::Courier::main() {
 				job -> result.delivery(job -> args.watcard);
 				prt.print(Printer::Courier, 'T', job -> args.sid, job -> args.amount);
 			}
+			delete job;
 		}
 	}
 
