@@ -16,37 +16,39 @@ void Student::main() {
 	VendingMachine *machine = nameServer.getMachine(id);
 	prt.print(Printer::Student, id, 'V', machine -> getId());
 
-	for (unsigned int i = 0; i < toPurchase; i ++) {
+	while(toPurchase > 0){
 		yield(mprng(1, 10));
 		for (;;) {
 			_Select(giftCard) {
 				try {
 					machine -> buy((VendingMachine::Flavours)favFlavour, *giftCard());
 					prt.print(Printer::Student, id, 'G', favFlavour, giftCard() -> getBalance());
+					toPurchase--;
 					giftCard.reset();
 					break;
 				} catch (VendingMachine::Free &) {
 					yield(4);
-					i--;
 					prt.print(Printer::Student, id, 'a', favFlavour, giftCard() -> getBalance());
 					break;
 				} catch (VendingMachine::Stock &) {
  					machine = nameServer.getMachine(id);
+					prt.print(Printer::Student, id, 'V', machine -> getId());
 					break;
 				}
 			} or _Select(watcard) {
 				try {
 					machine -> buy((VendingMachine::Flavours)favFlavour, *watcard());
 					prt.print(Printer::Student, id, 'B', favFlavour, watcard() -> getBalance());
+					toPurchase--;
 					break;
 				} catch (VendingMachine::Free &) {
 					yield(4);
-					i--;
 					prt.print(Printer::Student, id, 'A', favFlavour, watcard() -> getBalance());
 					break;
 				} catch (VendingMachine::Stock &) {
-					 machine = nameServer.getMachine(id);
-					 break;
+					machine = nameServer.getMachine(id);
+					prt.print(Printer::Student, id, 'V', machine -> getId());
+					break;
 				} catch (VendingMachine::Funds &) {
 					cardOffice.transfer(id, machine -> cost() + 5, watcard());
 					break;

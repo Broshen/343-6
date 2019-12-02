@@ -25,6 +25,7 @@ _Task WATCardOffice {
 		Printer &prt;
 		void main();
 	public:
+		bool done=false;
 		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt) {}
 	};					// communicates with bank
 
