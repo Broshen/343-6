@@ -69,6 +69,13 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 	if (pendingJobs.empty()) {
 		jobReady.wait();
 	}
+	// we may be woken up by the destructor signalling shutdown & no more jobs
+	// in which case, the queue would be empty. in this case, don't print anything
+	// and just return a nullptr
+	if (pendingJobs.empty()){
+		return nullptr;
+	}
+
 	Job *nextJob = pendingJobs.front();
 	pendingJobs.pop();
 	prt.print(Printer::WATCardOffice, 'W');
