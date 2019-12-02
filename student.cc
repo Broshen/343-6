@@ -50,20 +50,19 @@ void Student::main() {
                         prt.print(Printer::Student, id, 'V', machine -> getId());
                     } catch (VendingMachine::Funds &) {
                         watcard = cardOffice.transfer(id, machine -> cost() + 5, watcard());
-												break;
+                        break;
                     }
                 }
             } catch (WATCardOffice::Lost &) {
-                // TODO: a courier can lose a student's watcard during the transfer for a new watcard so this issue can occur repeatedly
                 prt.print(Printer::Student, id, 'L');
-								watcard.reset();
+                watcard.reset();
                 watcard = cardOffice.create(id, 5);
                 // do not break so that i do not have to yield
             }
         }
     }
-
-		_Select (watcard) delete watcard();
-
+    
+    _Select (watcard) delete watcard();
+    
     prt.print(Printer::Student, id, 'F');
 }
