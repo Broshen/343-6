@@ -94,10 +94,11 @@ void WATCardOffice::Courier::main() {
 			break;
 		} _Else{
 			Job *job = office.requestWork();
-
 			if(done){
 				break;
 			}
+			prt.print(Printer::Courier, 't', job -> args.sid, job -> args.amount);
+
 			bank.withdraw(job -> args.sid, job -> args.amount);
 
 			job -> args.watcard -> deposit(job -> args.amount);
@@ -106,7 +107,6 @@ void WATCardOffice::Courier::main() {
 				job -> result.exception(new Lost());
 				delete job -> args.watcard;
 			} else {
-				prt.print(Printer::Courier, 't', job -> args.sid, job -> args.amount);
 				job -> result.delivery(job -> args.watcard);
 				prt.print(Printer::Courier, 'T', job -> args.sid, job -> args.amount);
 			}
