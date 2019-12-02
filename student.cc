@@ -34,12 +34,7 @@ void Student::main() {
                     } catch (VendingMachine::Stock &) {
                         machine = nameServer.getMachine(id);
                         prt.print(Printer::Student, id, 'V', machine -> getId());
-                    } catch (WATCardOffice::Lost &) {
-												prt.print(Printer::Student, id, 'L');
-												watcard.reset();
-												watcard = cardOffice.create(id, 5);
-												// do not break so that i do not have to yield
-										}
+                    }
                 } or _Select(watcard) {
                     try {
                         machine -> buy((VendingMachine::Flavours)favFlavour, *watcard());
@@ -56,13 +51,13 @@ void Student::main() {
                     } catch (VendingMachine::Funds &) {
                         watcard = cardOffice.transfer(id, machine -> cost() + 5, watcard());
                         break;
-										} catch (WATCardOffice::Lost &) {
-												prt.print(Printer::Student, id, 'L');
-												watcard.reset();
-												watcard = cardOffice.create(id, 5);
-												// do not break so that i do not have to yield
-										}
-                }
+					} catch (WATCardOffice::Lost &) {
+							prt.print(Printer::Student, id, 'L');
+							watcard.reset();
+							watcard = cardOffice.create(id, 5);
+							// do not break so that i do not have to yield
+					}
+				}
             } catch (WATCardOffice::Lost &) {
                 prt.print(Printer::Student, id, 'L');
                 watcard.reset();
