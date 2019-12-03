@@ -16,7 +16,6 @@ using namespace std;					// direct access to std
 MPRNG mprng;
 
 int main( int argc, char * argv[] ) {
-    // MUST BE INT (NOT UNSIGNED) TO CORRECTLY TEST FOR NEGATIVE VALUES
     unsigned int seed = getpid();
     string filename = "soda.config";
     
@@ -38,45 +37,56 @@ int main( int argc, char * argv[] ) {
         << " [ config-file [ Seed ] ]" << endl;
         exit( EXIT_FAILURE );				// TERMINATE
     } // try
+    
     mprng.set_seed(seed);
+    
+    // The program main starts by calling processConfigFile to read and parse the simulation configurations.
     ConfigParms configParms;
     processConfigFile(filename.c_str(), configParms);
-
-    Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
+    
+    // Create in order the printer, bank, parent, WATCard office, groupoff, name server, vending machines, bottling plant,
+    // and students.
+    Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers);
     Bank bank(configParms.numStudents);
     Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
+    
+    // Couriers are created by the WATCard office.
     WATCardOffice office(printer, bank, configParms.numCouriers);
     Groupoff groupoff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
     NameServer ns(printer, configParms.numVendingMachines, configParms.numStudents);
     VendingMachine **vms = new VendingMachine*[configParms.numVendingMachines];
-
+    
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         vms[i] = new VendingMachine(printer, ns, i, configParms.sodaCost);
     }
-
-    BottlingPlant * bp = new BottlingPlant(
-        printer, ns,
-        configParms.numVendingMachines,
-        configParms.maxShippedPerFlavour,
-        configParms.maxStockPerFlavour,
-        configParms.timeBetweenShipments
-    );
-
+    
+    // Truck is created by the bottling plant
+    BottlingPlant * bp = new BottlingPlant( printer, ns,
+                                           configParms.numVendingMachines,
+                                           configParms.maxShippedPerFlavour,
+                                           configParms.maxStockPerFlavour,
+                                           configParms.timeBetweenShipments );
+    
     Student **students = new Student*[configParms.numStudents];
-
+    
     for (unsigned int i = 0; i < configParms.numStudents; i ++) {
         students[i] = new Student(printer, ns, office, groupoff, i, configParms.maxPurchases);
     }
-
-
+    
+    // wait for all students have purchased their specified number of bottles before terminating
     for (unsigned int i = 0; i < configParms.numStudents; i ++) {
-       delete students[i];
+        delete students[i];
     }
     
     delete [] students;
+    
+    // delete the bottling plant before deleting the vending machines to allow the truck to complete its final
+    // deliveries to the vending machines;
     delete bp;
+    
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         delete vms[i];
     }
+    
     delete [] vms;
 } // main
