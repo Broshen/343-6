@@ -32,6 +32,7 @@ void NameServer::VMregister( VendingMachine * vendingmachine ){
 VendingMachine * NameServer::getMachine( unsigned int id ){
 	VendingMachine * curMachine =  machines[assignedMachine[id]];
 
+	// cycle through the machines, so that the next call to getMachine will get the next machine
 	assignedMachine[id] = (assignedMachine[id] + 1) % numVendingMachines;
 	prt.print(Printer::NameServer, 'N', id ,curMachine -> getId());
 

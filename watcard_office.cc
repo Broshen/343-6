@@ -11,13 +11,17 @@ WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCourie
 	}
 }
 
+// need to delete all couriers on destructor
 WATCardOffice::~WATCardOffice() {
+	// set deletion flag to true for all couriers
 	for (unsigned int i = 0; i < numCouriers; i ++) {
 		courierPool[i]->done = true;
 	}
+	// wake up all couriers, so that they can see the flag, and exit their main()
 	for (unsigned int i = 0; i < numCouriers; i ++) {
 		jobReady.signalBlock();
 	}
+	// wait for courier tasks to finish and delete
 	for (unsigned int i = 0; i < numCouriers; i ++) {
 		delete courierPool[i];
 	}
@@ -31,10 +35,6 @@ void WATCardOffice::main() {
 			_Accept(~WATCardOffice) break;
 			or _Accept(create, transfer, requestWork){};
 		} catch (uMutexFailure::RendezvousFailure &) {}
-		
-		// TODO: try this _When statement to see if we can remove uCondition
-		// Concern: is WatCardOffice allowed to block?
- 		// or _When (!pendingJobs.empty()) _Accept(requestWork) ;
 	}
 	prt.print(Printer::WATCardOffice, 'F');
 }
@@ -82,29 +82,35 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 	return nextJob;
 }
 
-// Each courier task calls requestWork, blocks until a Job request is ready, and then receives
-// the next Job request as the result of the call. As soon as the request is satisfied (i.e., money is obtained from the
-// bank), the courier updates the student’s WATCard. There is a 1 in 6 chance a courier loses a student’s WATCard
-// after the update. When the card is lost, the exception WATCardOffice::Lost is inserted into the future, rather than
-// making the future available, and the current WATCard is deleted.
 void WATCardOffice::Courier::main() {
 	prt.print(Printer::Courier, 'S');
 	for (;;) {
 		_Accept(~Courier){
 			break;
 		} _Else{
+
+			// Each courier task calls requestWork, blocks until a Job request is ready, and then receives
+			// the next Job request as the result of the call.
 			Job *job = office.requestWork();
+
+			// If courier was actually woken up to be shut down, break from loop and exit
 			if(done){
 				break;
 			}
+
 			prt.print(Printer::Courier, 't', job -> args.sid, job -> args.amount);
 
+			// obtain money from the bank and update the student’s WATCard.
 			bank.withdraw(job -> args.sid, job -> args.amount);
-
 			job -> args.watcard -> deposit(job -> args.amount);
+
+
+			// 1 in 6 chance a courier loses a student’s WATCard after the update.
 			if (mprng(5) == 0) {
 				prt.print(Printer::Courier, 'L', job->args.sid);
+				// When the card is lost, the exception WATCardOffice::Lost is inserted into the future
 				job -> result.exception(new Lost());
+				// current WATCard is deleted.
 				delete job -> args.watcard;
 			} else {
 				job -> result.delivery(job -> args.watcard);

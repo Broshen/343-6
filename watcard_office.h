@@ -10,9 +10,8 @@ using namespace std;
 _Task WATCardOffice {
 	struct Job {							// marshalled arguments and return future
 		struct Args {
-			unsigned int sid, amount;						// call arguments (YOU DEFINE "Args")
+			unsigned int sid, amount;
 			WATCard *watcard;
-			bool isCreate;
 		};
 		Args args;
 		WATCard::FWATCard result;			// return future
@@ -24,8 +23,8 @@ _Task WATCardOffice {
 		Bank &bank;
 		Printer &prt;
 		void main();
-	public:
-		bool done=false;
+	  public:
+		bool done=false; // flag variable for Courier exit condition - public so that WATCardOffice can set it
 		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt) {}
 	};					// communicates with bank
 

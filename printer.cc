@@ -42,7 +42,8 @@ Printer::~Printer(){
 	delete [] states;
 }
 
-
+// flush functions for different object types
+// what is printed depends on the object type + state
 void Printer::flush_parent(){
 	switch(states[0].state){
 		case 'S':
@@ -188,7 +189,7 @@ void Printer::flush_courier(unsigned int id){
 	}
 }
 
-
+// common function to flush a member based on its index in the states list
 void Printer::flush_member(unsigned int i){
 	switch(i){
 		case 0:
@@ -231,12 +232,13 @@ void Printer::flush(){
 			flush_member(i);
 		} 
 		if(i < lastSet) cout<<"\t";
-		states[i].set = false; // reset/unset all voters
+		states[i].set = false; // reset/unset all members
 	}
 	cout<<endl;
-	lastSet = 0; // reset the last_set tracker
+	lastSet = 0; // reset the lastSet tracker
 }
 
+// convert an object type to an index in the states list
 unsigned int Printer::kindToIndex( Printer::Kind kind, unsigned int lid){
 	switch( kind ){
 		case Printer::Parent:
@@ -262,6 +264,7 @@ unsigned int Printer::kindToIndex( Printer::Kind kind, unsigned int lid){
 	throw "Unknown kind" + kind;
 }
 
+// print functions with various signatures
 void Printer::print( Printer::Kind kind, char state ){
 	unsigned int id = kindToIndex(kind);
 	if(states[id].set){

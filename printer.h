@@ -11,9 +11,10 @@ _Monitor Printer {
 	};
 
 	unsigned int numStudents, numVendingMachines, numCouriers;
-	unsigned int lastSet=0;
+	unsigned int lastSet=0; // keep track of the last state in the list that was set/accessed by print()
 	State *states;
 
+	// helper flush functions for different members
 	void flush_parent();
 	void flush_groupoff();
 	void flush_WATCard();
@@ -24,7 +25,9 @@ _Monitor Printer {
 	void flush_vending(unsigned int id);
 	void flush_courier(unsigned int id);
 	
+	// general flush function that routes to specific helpers
 	void flush_member(unsigned int i);
+	// general flush function to flush all members
 	void flush();
 
   public:

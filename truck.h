@@ -17,7 +17,7 @@ _Task Truck {
 	unsigned int numVendingMachines;
 	unsigned int maxStockPerFlavour;
 	unsigned int cargo[4]; // 4 flavours
-	unsigned int lastStocked = 0;
+	unsigned int lastStocked = 0; // index of the last vending machine stocked
   public:
 	Truck( Printer & prt, NameServer & nameServer, BottlingPlant & plant,
 		   unsigned int numVendingMachines, unsigned int maxStockPerFlavour );

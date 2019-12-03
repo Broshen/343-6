@@ -7,8 +7,8 @@
 _Task Groupoff {
 	Printer &prt;
 	unsigned int numStudents, sodaCost, groupoffDelay, waiting = 0;
-	WATCard::FWATCard *giftCards;
-	int *studentIndex;
+	WATCard::FWATCard *giftCards; // list of futures to deliver to students
+	int *studentIndex; // list of student indices still waiting to receive giftcards
 	void main();
   public:
 	Groupoff( Printer & prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );

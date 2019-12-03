@@ -3,9 +3,6 @@
 #include "nameserver.h"
 #include "bottling.h"
 
-
-#include <iostream>
-
 void Truck::main(){
 	prt.print(Printer::Truck, 'S');
 	// The truck begins by obtaining the location of each vending machine from the name server.

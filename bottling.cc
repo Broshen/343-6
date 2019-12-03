@@ -48,6 +48,8 @@ void BottlingPlant::main(){
 		} or _Accept(~BottlingPlant) {
 
 			closing = true;
+			// accept one last getShipment call so that the Shutdown() exception is throw, and the truck
+			// can catch it and exit
 			try {
 				_Accept(getShipment){}
 			} catch( uMutexFailure::RendezvousFailure& ) {}

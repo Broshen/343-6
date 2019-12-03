@@ -17,8 +17,8 @@ _Task BottlingPlant {
 	unsigned int numVendingMachines,maxShippedPerFlavour, maxStockPerFlavour, timeBetweenShipments;
 	Truck * truck;
 	unsigned int inventory[4]; // inventory for each flavor
-	bool closing = false;
-	void produce();
+	bool closing = false;	// flag variable to know when to throw Shutdown in getShipment
+	void produce(); // helper function to yield + fill inventory
 
   public:
 	_Event Shutdown {};					// shutdown plant
