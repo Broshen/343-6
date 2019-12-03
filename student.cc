@@ -9,7 +9,7 @@ Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOf
 
 
 void Student::main() {
-
+    
     // A student begins by selecting a random number of bottles to purchase [1, MaxPurchases], a
     // random favourite flavour [0, 3], creates a WATCard via the WATCardOffice with a $5 balance, creates a gift card
     // via the Groupoff with a value of SodaCost, and obtains the location of a vending machine from the name server.
@@ -26,7 +26,7 @@ void Student::main() {
     while(toPurchase > 0){
         // Before each attempt to buy a soda, a student yields a random number of times in the range [1, 10].
         yield(mprng(1, 10));
-
+        
         for (;;) {
             try {
                 // wait for money to be transferred either from Groupoff to their gift card

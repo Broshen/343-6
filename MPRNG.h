@@ -6,7 +6,8 @@
 
 _Monitor MPRNG {
     unsigned int seed;
-  public:
+    
+public:
     MPRNG( unsigned int seed_ = 1009 ) { seed = seed_; srand( seed ); }	// set seed
     void set_seed( unsigned int seed_ ) { seed = seed_; srand( seed ); } // set seed
     _Nomutex unsigned int get_seed() const { return seed; } // get seed

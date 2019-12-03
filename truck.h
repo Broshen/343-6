@@ -10,17 +10,18 @@ extern MPRNG mprng;
 _Task BottlingPlant;
 
 _Task Truck {
-	void main();
-	Printer & prt;
-	NameServer & nameServer;
-	BottlingPlant & plant;
-	unsigned int numVendingMachines;
-	unsigned int maxStockPerFlavour;
-	unsigned int cargo[4]; // 4 flavours
-	unsigned int lastStocked = 0; // index of the last vending machine stocked
-  public:
-	Truck( Printer & prt, NameServer & nameServer, BottlingPlant & plant,
-		   unsigned int numVendingMachines, unsigned int maxStockPerFlavour );
+    void main();
+    Printer & prt;
+    NameServer & nameServer;
+    BottlingPlant & plant;
+    unsigned int numVendingMachines;
+    unsigned int maxStockPerFlavour;
+    unsigned int cargo[4]; // 4 flavours
+    unsigned int lastStocked = 0; // index of the last vending machine stocked
+    
+public:
+    Truck( Printer & prt, NameServer & nameServer, BottlingPlant & plant,
+          unsigned int numVendingMachines, unsigned int maxStockPerFlavour );
 };
 
 #endif
