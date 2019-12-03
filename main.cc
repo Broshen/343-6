@@ -45,20 +45,17 @@ int main( int argc, char * argv[] ) {
     Printer printer(configParms.numStudents, configParms.numVendingMachines, configParms.numCouriers); 
     Bank bank(configParms.numStudents);
     Parent parent(printer, bank, configParms.numStudents, configParms.parentalDelay);
-    WATCardOffice *office = new WATCardOffice(printer, bank, configParms.numCouriers);
-    Groupoff *groupoff = new Groupoff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
-
-    NameServer * ns = new NameServer(printer, configParms.numVendingMachines, configParms.numStudents);
+    WATCardOffice office(printer, bank, configParms.numCouriers);
+    Groupoff groupoff(printer, configParms.numStudents, configParms.sodaCost, configParms.groupoffDelay);
+    NameServer ns(printer, configParms.numVendingMachines, configParms.numStudents);
     VendingMachine **vms = new VendingMachine*[configParms.numVendingMachines];
 
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
-        vms[i] = new VendingMachine(printer, *ns, i, configParms.sodaCost);
-        ns->VMregister(vms[i]);
+        vms[i] = new VendingMachine(printer, ns, i, configParms.sodaCost);
     }
 
-
     BottlingPlant * bp = new BottlingPlant(
-        printer, *ns,
+        printer, ns,
         configParms.numVendingMachines,
         configParms.maxShippedPerFlavour,
         configParms.maxStockPerFlavour,
@@ -68,7 +65,7 @@ int main( int argc, char * argv[] ) {
     Student **students = new Student*[configParms.numStudents];
 
     for (unsigned int i = 0; i < configParms.numStudents; i ++) {
-        students[i] = new Student(printer, *ns, *office, *groupoff, i, configParms.maxPurchases);
+        students[i] = new Student(printer, ns, office, groupoff, i, configParms.maxPurchases);
     }
 
 
@@ -77,15 +74,9 @@ int main( int argc, char * argv[] ) {
     }
     
     delete [] students;
-
-    delete office;
-    delete groupoff;
-
     delete bp;
-    delete ns;
     for(unsigned int i=0; i<configParms.numVendingMachines; i++){
         delete vms[i];
     }
     delete [] vms;
-    
 } // main

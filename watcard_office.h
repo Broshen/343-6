@@ -20,13 +20,14 @@ _Task WATCardOffice {
 	};
 
 	_Task Courier { 
+		unsigned int id;
 		WATCardOffice &office;
 		Bank &bank;
 		Printer &prt;
 		void main();
 	public:
 		bool done=false;
-		Courier(WATCardOffice &office, Bank &bank, Printer &prt): office(office), bank(bank), prt(prt) {}
+		Courier(unsigned int id, WATCardOffice &office, Bank &bank, Printer &prt): id(id), office(office), bank(bank), prt(prt) {}
 	};					// communicates with bank
 
 	Printer &prt;

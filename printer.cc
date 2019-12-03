@@ -94,10 +94,10 @@ void Printer::flush_name(){
 			cout<<states[3].state<<states[3].value1;
 			break;
 		case 'N':
-			cout<<states[3].state<<states[3].value1<<","<<states[2].value2;
+			cout<<states[3].state<<states[3].value1<<","<<states[3].value2;
 			break;
 		default:
-			throw "unknown state for name server "+states[2].state;
+			throw "unknown state for name server "+states[3].state;
 	}
 }
 void Printer::flush_truck(){
