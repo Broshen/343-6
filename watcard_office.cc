@@ -115,5 +115,5 @@ void WATCardOffice::Courier::main() {
 		}
 	}
 
-	prt.print(Printer::Courier, 'F',id );
+	prt.print(Printer::Courier, id, 'F');
 }

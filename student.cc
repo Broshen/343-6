@@ -1,6 +1,7 @@
 #include "student.h"
 #include "watcard_office.h"
 #include "MPRNG.h"
+
 extern MPRNG mprng;
 Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice, Groupoff & groupoff,
                  unsigned int id, unsigned int maxPurchases ) : prt(prt), nameServer(nameServer), cardOffice(cardOffice), groupoff(groupoff), id(id), maxPurchases(maxPurchases) {}
@@ -34,6 +35,7 @@ void Student::main() {
                     } catch (VendingMachine::Stock &) {
                         machine = nameServer.getMachine(id);
                         prt.print(Printer::Student, id, 'V', machine -> getId());
+                        break;
                     }
                 } or _Select(watcard) {
                     try {
@@ -48,6 +50,7 @@ void Student::main() {
                     } catch (VendingMachine::Stock &) {
                         machine = nameServer.getMachine(id);
                         prt.print(Printer::Student, id, 'V', machine -> getId());
+                        break;
                     } catch (VendingMachine::Funds &) {
                         watcard = cardOffice.transfer(id, machine -> cost() + 5, watcard());
                         break;
