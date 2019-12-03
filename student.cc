@@ -1,6 +1,7 @@
 #include "student.h"
 #include "watcard_office.h"
 #include "MPRNG.h"
+
 extern MPRNG mprng;
 
 Student::Student( Printer & prt, NameServer & nameServer, WATCardOffice & cardOffice, Groupoff & groupoff,
@@ -52,6 +53,7 @@ void Student::main() {
                         // vending machine from the name server and attempt another purchase.
                         machine = nameServer.getMachine(id);
                         prt.print(Printer::Student, id, 'V', machine -> getId());
+                        break;
                     }
                 } or _Select(watcard) {
                     try {
@@ -73,6 +75,7 @@ void Student::main() {
                         // vending machine from the name server and attempt another purchase.
                         machine = nameServer.getMachine(id);
                         prt.print(Printer::Student, id, 'V', machine -> getId());
+                        break;
                     } catch (VendingMachine::Funds &) {
                         // If the vending machine indicates insufficient funds, a student
                         // transfers the current vending-machine soda-cost plus $5 to their WATCard

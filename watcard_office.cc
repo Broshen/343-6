@@ -7,7 +7,7 @@ extern MPRNG mprng;
 WATCardOffice::WATCardOffice( Printer & prt, Bank & bank, unsigned int numCouriers ): prt(prt), bank(bank), numCouriers(numCouriers) {
 	courierPool = new Courier*[numCouriers];
 	for (unsigned int i = 0; i < numCouriers; i ++) {
-		courierPool[i] = new Courier (*this, bank, prt);
+		courierPool[i] = new Courier (i, *this, bank, prt);
 	}
 }
 
@@ -33,7 +33,8 @@ void WATCardOffice::main() {
 	for (;;) {
 		try {
 			_Accept(~WATCardOffice) break;
-			or _Accept(create, transfer, requestWork){};
+			or _Accept(create, transfer){}
+			or _Accept(requestWork) {}
 		} catch (uMutexFailure::RendezvousFailure &) {}
 	}
 	prt.print(Printer::WATCardOffice, 'F');
@@ -83,7 +84,7 @@ WATCardOffice::Job * WATCardOffice::requestWork() {
 }
 
 void WATCardOffice::Courier::main() {
-	prt.print(Printer::Courier, 'S');
+	prt.print(Printer::Courier, id, 'S');
 	for (;;) {
 		_Accept(~Courier){
 			break;
@@ -98,7 +99,7 @@ void WATCardOffice::Courier::main() {
 				break;
 			}
 
-			prt.print(Printer::Courier, 't', job -> args.sid, job -> args.amount);
+			prt.print(Printer::Courier, id, 't', job -> args.sid, job -> args.amount);
 
 			// obtain money from the bank and update the student’s WATCard.
 			bank.withdraw(job -> args.sid, job -> args.amount);
@@ -107,18 +108,18 @@ void WATCardOffice::Courier::main() {
 
 			// 1 in 6 chance a courier loses a student’s WATCard after the update.
 			if (mprng(5) == 0) {
-				prt.print(Printer::Courier, 'L', job->args.sid);
 				// When the card is lost, the exception WATCardOffice::Lost is inserted into the future
+				prt.print(Printer::Courier,  id, 'L', job->args.sid);
 				job -> result.exception(new Lost());
 				// current WATCard is deleted.
 				delete job -> args.watcard;
 			} else {
 				job -> result.delivery(job -> args.watcard);
-				prt.print(Printer::Courier, 'T', job -> args.sid, job -> args.amount);
+				prt.print(Printer::Courier,  id,'T', job -> args.sid, job -> args.amount);
 			}
 			delete job;
 		}
 	}
 
-	prt.print(Printer::Courier, 'F');
+	prt.print(Printer::Courier, id, 'F');
 }
